@@ -135,7 +135,7 @@ exports.getReviews = catchAsyncError(async (req, res, next) => {
 //Delete Reviews - api/v1/reviews - api/v1/reviews
 exports.deleteReviews = catchAsyncError(async (req, res, next) => {
   const product = await Product.findById(req.query.productId);
-
+console.log(product)
   //filtering the reviews which does match the deleting review id
   const reviews = product.reviews.filter(review => {
     return review._id.toString() !== req.query.id.toString();
