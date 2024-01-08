@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
-import MetaData from "./layouts/MetaData";
+import MetaData from ".././layouts/MetaData";
 import { useDispatch, useSelector } from "react-redux";
-import getProducts from "../actions/productActions";
-import Loader from "./layouts/Loader";
-import Product from "./product/Product";
+import getProducts from "../../actions/productActions";
+import Loader from ".././layouts/Loader";
+import Product from ".././product/Product";
 import { toast } from "react-toastify";
 import Pagination from "react-js-pagination";
+import { useParams } from "react-router-dom";
 
-export default function Home() {
+export default function ProductSearch() {
   const dispatch = useDispatch();
   const {products, loading, error, productsCount, resPerPage} =    useSelector((state) => state.productsState)
   const [currentPage, setCurrentPage] = useState(1);
+  const {keyword} = useParams();
 
   const setCurrentPageNo = (pageNo) =>{
 
@@ -19,23 +21,16 @@ export default function Home() {
      
   }
 
-  // useEffect(() => {
-  //   if (error) {
-  //     return toast.error(error, {
-  //       position: toast.POSITION.BOTTOM_CENTER,
-  //     });
-  //   }
-
-  //   dispatch(getProducts);
-  // }, [error, dispatch]);
-  useEffect(()=>{
-    if(error) {
-        return toast.error(error,{
-            position: toast.POSITION.BOTTOM_CENTER
-        })
+  useEffect(() => {
+    if (error) {
+      return toast.error(error, {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
     }
-    dispatch(getProducts(null, currentPage)) 
-}, [error, dispatch, currentPage])
+
+    dispatch(getProducts(keyword,currentPage));
+  }, [error, dispatch,currentPage,keyword]);
+
   return (
     <Fragment>
       {loading ? (
@@ -43,7 +38,7 @@ export default function Home() {
       ) : (
         <Fragment>
           <MetaData title={"Buy Best Products"} />
-          <h1 id="products_heading">Latest Products</h1>
+          <h1 id="products_heading">Search Products</h1>
 
           <section id="products" className="container mt-5">
             <div className="row">
