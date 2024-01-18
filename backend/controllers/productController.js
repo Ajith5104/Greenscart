@@ -5,19 +5,25 @@ const APIFeatures = require("../utils/apiFeatures");
 //Get Products - /api/v1/products
 exports.getProducts = async (req, res, next) => {
   const resPerPage = 3;
-  const apiFeatures = new APIFeatures(Product.find(), req.query)
-    .search()
-    .filter()
-    .paginate(resPerPage);
-  const products = await apiFeatures.query;
+
+  let buildQuery = () => {
+    return new APIFeatures(Product.find(), req.query).search().filter();
+  };
+
+  const filteredProductsCount = await buildQuery().query.countDocuments({});
   const totalProductsCount = await Product.countDocuments({});
   let productsCount = totalProductsCount;
-  // await new Promise(resolve => setTimeout(resolve,3000))
+
+  if (filteredProductsCount !== totalProductsCount) {
+    productsCount = filteredProductsCount;
+  }
+
+  const products = await buildQuery().paginate(resPerPage).query;
   res.status(200).json({
     success: true,
     count: totalProductsCount,
     resPerPage,
-    products
+    products,
   });
 };
 
@@ -139,9 +145,9 @@ exports.getReviews = catchAsyncError(async (req, res, next) => {
 //Delete Reviews - api/v1/reviews - api/v1/reviews
 exports.deleteReviews = catchAsyncError(async (req, res, next) => {
   const product = await Product.findById(req.query.productId);
-console.log(product)
+  console.log(product);
   //filtering the reviews which does match the deleting review id
-  const reviews = product.reviews.filter(review => {
+  const reviews = product.reviews.filter((review) => {
     return review._id.toString() !== req.query.id.toString();
   });
 

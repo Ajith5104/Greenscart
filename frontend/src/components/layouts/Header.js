@@ -1,12 +1,15 @@
 import React from "react";
 import Search from "./Search";
+import {Link} from 'react-router-dom'
 
 export default function Header() {
   return (
     <nav className="navbar row">
       <div className="col-12 col-md-3">
         <div className="navbar-brand">
+          <Link to='/'>
           <img width="130px" alt='Greenscart Logo' src="/images/logo.png" />
+          </Link>
           {/* <h3 style={{color:"green", fontWeight:"800"}}>GreensCart</h3> */}
         </div>
       </div>

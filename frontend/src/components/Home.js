@@ -18,23 +18,13 @@ export default function Home() {
       setCurrentPage(pageNo)
      
   }
-
-  // useEffect(() => {
-  //   if (error) {
-  //     return toast.error(error, {
-  //       position: toast.POSITION.BOTTOM_CENTER,
-  //     });
-  //   }
-
-  //   dispatch(getProducts);
-  // }, [error, dispatch]);
   useEffect(()=>{
     if(error) {
         return toast.error(error,{
             position: toast.POSITION.BOTTOM_CENTER
         })
     }
-    dispatch(getProducts(null, currentPage)) 
+    dispatch(getProducts(null,null,null,null,currentPage)) 
 }, [error, dispatch, currentPage])
   return (
     <Fragment>
@@ -49,7 +39,7 @@ export default function Home() {
             <div className="row">
               {products &&
                 products.map((product) => (
-                  <Product key={product._id} product={product} />
+                  <Product  key={product._id} product={product} col={3}/>
                 ))}
             </div>
           </section>
